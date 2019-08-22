@@ -1,5 +1,6 @@
 package pablo.myexample.freechat;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
@@ -79,8 +80,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.logout) {
+            Intent intent = new Intent(this, SignIn.class);
+            startActivity(intent);
         } else if (id == R.id.profile) {
+            Intent intent = new Intent(this, Profile.class);
+            startActivity(intent);
         } else if (id == R.id.startAChat) {
+            Intent intent = new Intent(this, StartAChat.class);
+            startActivity(intent);
         }
         DrawerLayout drawer = findViewById(R.id.coordinator_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -92,6 +99,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
     public void searchChats(MenuItem item){
-        Toast.makeText(this, "Search",Toast.LENGTH_SHORT).show();
+
     }
 }

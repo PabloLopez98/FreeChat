@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_vertical|center"
-    android:orientation="vertical"
+    android:gravity="center_vertical|center_horizontal"
     android:background="@color/colorPrimary"
-    tools:context=".Register">
+    tools:context=".Profile"
+    android:orientation="vertical">
 
     <TextView
         android:text="Profile Image"
@@ -22,7 +22,6 @@
         android:layout_width="125dp"
         android:layout_height="125dp"
         android:clickable="true"
-
         android:background="@android:drawable/picture_frame"/>
 
     <Space
@@ -43,50 +42,28 @@
         android:maxLines="1"
         android:paddingStart="10dp" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
+
 
     <EditText
+        android:background="@drawable/rounded_edittext"
         android:id="@+id/inputEmail"
         android:layout_width="match_parent"
         android:layout_height="175px"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/rounded_edittext"
         android:ems="10"
+        android:hint="Confirm Username"
         android:inputType="textEmailAddress"
         android:maxLines="1"
-        android:paddingStart="10dp"
-        android:hint="Email" />
-
-    <EditText
-        android:id="@+id/inputPassword"
-        android:layout_width="match_parent"
-        android:layout_height="175px"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/rounded_edittext"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:maxLines="1"
-        android:paddingStart="10dp"
-        android:hint="Password"
-        />
-
-
-    <EditText
-        android:id="@+id/inputConfirmPassword"
-        android:layout_width="match_parent"
-        android:layout_height="175px"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="30dp"
-        android:background="@drawable/rounded_edittext"
-        android:ems="10"
-        android:hint="Confirm Password"
-        android:inputType="textPassword"
-        android:maxLines="1"
         android:paddingStart="10dp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
 
     <Button
         android:id="@+id/buttonToCreateAccount"
@@ -96,8 +73,12 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="16dp"
         android:background="@color/colorAlternative"
-        android:onClick="Register"
-        android:text="Register" />
+        android:onClick="Update"
+        android:text="Update Username &amp; Profile" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
 
     <Button
         android:id="@+id/cancel"
@@ -106,7 +87,11 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:background="@color/colorAlternative"
-        android:onClick="Cancel"
+        android:onClick="returnToMain"
         android:text="Cancel" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
 
 </LinearLayout>
