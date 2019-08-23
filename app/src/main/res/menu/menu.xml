@@ -4,7 +4,7 @@
     <item
         android:id="@+id/search"
         android:icon="@drawable/ic_search_24dp"
-        android:onClick="searchChats"
         android:title="search"
+        android:onClick="toSearch"
         app:showAsAction="always" />
 </menu>

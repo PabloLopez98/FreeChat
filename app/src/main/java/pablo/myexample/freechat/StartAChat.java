@@ -20,8 +20,8 @@ public class StartAChat extends AppCompatActivity {
         setTitle("Start A Chat");
 
         ArrayList<UserChosenForChat> arrayList = new ArrayList<>();
-        UserChosenForChat userChosenForChat = new UserChosenForChat("Pablo Lopez", "myemail@gmail.com");
-        UserChosenForChat userChosenForChat2 = new UserChosenForChat("NoName Lopez", "nonamemyemail@gmail.com");
+        UserChosenForChat userChosenForChat = new UserChosenForChat("Pablo Lopez", "nickname");
+        UserChosenForChat userChosenForChat2 = new UserChosenForChat("NoName Lopez", "nickname2");
 
         arrayList.add(userChosenForChat);
         arrayList.add(userChosenForChat2);

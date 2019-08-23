@@ -43,11 +43,11 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/userchosenemail"
+                    android:id="@+id/userchosennickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="4dp"
-                    android:text="Email"
+                    android:text="Nickname"
                     android:textColor="@android:color/black"
                     android:textSize="16dp" />
 

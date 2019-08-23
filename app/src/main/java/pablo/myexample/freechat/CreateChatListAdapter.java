@@ -28,7 +28,7 @@ public class CreateChatListAdapter extends RecyclerView.Adapter<CreateChatListAd
     @Override
     public void onBindViewHolder(CreateChatListAdapter.ViewHolder holder, int position) {
         holder.name.setText(mData.get(position).getName());
-        holder.email.setText(mData.get(position).getEmail());
+        holder.nickname.setText(mData.get(position).getNickname());
     }
 
     @Override
@@ -37,11 +37,11 @@ public class CreateChatListAdapter extends RecyclerView.Adapter<CreateChatListAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView name, email;
+        TextView name, nickname;
         ViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.userchosenname);
-            email = itemView.findViewById(R.id.userchosenemail);
+            nickname = itemView.findViewById(R.id.userchosennickname);
         }
     }
 }

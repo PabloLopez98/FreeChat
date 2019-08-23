@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical|center_horizontal"
-    android:background="@color/colorPrimary"
     tools:context=".Profile"
     android:orientation="vertical">
 
@@ -37,7 +36,7 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_edittext"
         android:ems="10"
-        android:hint="Username"
+        android:hint="Nickname"
         android:inputType="textEmailAddress"
         android:maxLines="1"
         android:paddingStart="10dp" />
@@ -48,15 +47,15 @@
 
 
     <EditText
-        android:background="@drawable/rounded_edittext"
         android:id="@+id/inputEmail"
         android:layout_width="match_parent"
         android:layout_height="175px"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/rounded_edittext"
         android:ems="10"
-        android:hint="Confirm Username"
+        android:hint="Confirm Nickname"
         android:inputType="textEmailAddress"
         android:maxLines="1"
         android:paddingStart="10dp" />

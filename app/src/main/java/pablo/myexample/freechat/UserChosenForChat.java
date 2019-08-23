@@ -2,14 +2,14 @@ package pablo.myexample.freechat;
 
 public class UserChosenForChat {
 
-    private String Name, Email;
+    private String Name, Nickname;
 
     public UserChosenForChat() {
     }
 
-    public UserChosenForChat(String Name, String Email){
+    public UserChosenForChat(String Name, String Nickname){
         this.Name = Name;
-        this.Email = Email;
+        this.Nickname = Nickname;
     }
 
     public String getName() {
@@ -20,11 +20,11 @@ public class UserChosenForChat {
         Name = name;
     }
 
-    public String getEmail() {
-        return Email;
+    public String getNickname() {
+        return Nickname;
     }
 
-    public void setEmail(String email) {
-        Email = email;
+    public void setNickname(String nickname) {
+        Nickname = nickname;
     }
 }

@@ -1,5 +1,6 @@
 package pablo.myexample.freechat;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -98,7 +99,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         inflater.inflate(R.menu.menu, menu);
         return true;
     }
-    public void searchChats(MenuItem item){
 
+    public void toSearch(MenuItem item){
+        Intent intent = new Intent(this, SearchConversations.class);
+        startActivity(intent);
     }
 }
