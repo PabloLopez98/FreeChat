@@ -30,9 +30,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ChatPreviewAdapter.onChatListener {
 
-    ChatPreviewAdapter chatPreviewAdapter;
+    private ChatPreviewAdapter chatPreviewAdapter;
+    private ArrayList<ChatPreviewCardObject> arrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        ArrayList<ChatPreviewCardObject> arrayList = new ArrayList<>();
+        arrayList = new ArrayList<>();
 
         Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
 
@@ -60,11 +61,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        chatPreviewAdapter = new ChatPreviewAdapter(this, arrayList);
+        chatPreviewAdapter = new ChatPreviewAdapter(this, arrayList, this);
         recyclerView.setAdapter(chatPreviewAdapter);
 
     }
-
 
 
     @Override
@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -94,14 +95,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;
     }
 
-    public void toSearch(MenuItem item){
+    public void toMethod(MenuItem item) {
         Intent intent = new Intent(this, SearchConversations.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onChatClick(int position) {
+        Intent intent = new Intent(this, Conversation.class);
         startActivity(intent);
     }
 }

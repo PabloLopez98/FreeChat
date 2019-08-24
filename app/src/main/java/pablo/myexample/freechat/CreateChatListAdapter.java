@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class CreateChatListAdapter extends RecyclerView.Adapter<CreateChatListAdapter.ViewHolder>{
+
     private ArrayList<UserChosenForChat> mData;
     private LayoutInflater mInflater;
 

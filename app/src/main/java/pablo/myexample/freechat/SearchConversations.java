@@ -4,12 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import java.util.ArrayList;
 
-public class SearchConversations extends AppCompatActivity {
+public class SearchConversations extends AppCompatActivity implements ChatPreviewAdapter.onChatListener {
 
     ChatPreviewAdapter chatPreviewAdapter;
 
@@ -17,6 +18,8 @@ public class SearchConversations extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_conversations);
+
+        setTitle("Search Chats");
 
         ArrayList<ChatPreviewCardObject> arrayList = new ArrayList<>();
         Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
@@ -26,8 +29,14 @@ public class SearchConversations extends AppCompatActivity {
         arrayList.add(chatPreviewCardObject2);
         RecyclerView recyclerView = findViewById(R.id.chosenforchatrecyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        chatPreviewAdapter = new ChatPreviewAdapter(this, arrayList);
+        chatPreviewAdapter = new ChatPreviewAdapter(this, arrayList, this);
         recyclerView.setAdapter(chatPreviewAdapter);
 
+    }
+
+    @Override
+    public void onChatClick(int position) {
+        Intent intent = new Intent(this, SearchConversations.class);
+        startActivity(intent);
     }
 }

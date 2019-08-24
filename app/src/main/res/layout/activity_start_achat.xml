@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:background="@color/colorAlternative"
         android:text="Create Chat Room"
         app:layout_constraintBottom_toTopOf="@+id/buttonToCreateAccount3"
@@ -63,19 +63,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        tools:listitem="@layout/user_chosen_for_chat"
         android:id="@+id/chosenforchatrecyclerview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:background="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/buttonToCreateAccount2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+        app:layout_constraintTop_toBottomOf="@+id/button3"
+        tools:listitem="@layout/user_chosen_for_chat" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

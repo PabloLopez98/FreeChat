@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Conversation"></activity>
+        <activity android:name=".Conversation"
+            android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".SearchConversations" />
         <activity android:name=".StartAChat" />
         <activity android:name=".Profile" />

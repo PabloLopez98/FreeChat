@@ -38,7 +38,7 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_edittext"
         android:ems="10"
-        android:hint="Username"
+        android:hint="Permanent Username"
         android:inputType="textEmailAddress"
         android:maxLines="1"
         android:paddingStart="10dp" />
@@ -53,10 +53,10 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_edittext"
         android:ems="10"
+        android:hint="Permanent Login Email"
         android:inputType="textEmailAddress"
         android:maxLines="1"
-        android:paddingStart="10dp"
-        android:hint="Email" />
+        android:paddingStart="10dp" />
 
     <EditText
         android:id="@+id/inputPassword"
@@ -67,11 +67,10 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_edittext"
         android:ems="10"
+        android:hint="Nickname"
         android:inputType="textPassword"
         android:maxLines="1"
-        android:paddingStart="10dp"
-        android:hint="Password"
-        />
+        android:paddingStart="10dp" />
 
 
     <EditText
@@ -83,7 +82,7 @@
         android:layout_marginBottom="30dp"
         android:background="@drawable/rounded_edittext"
         android:ems="10"
-        android:hint="Confirm Password"
+        android:hint="Permanent Password"
         android:inputType="textPassword"
         android:maxLines="1"
         android:paddingStart="10dp" />
