@@ -20,6 +20,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         this.mData = data;
     }
 
+    //In the future alter layouts (other message on left, my message on right) by checking my message id with my id: if my id(right) else (left)
     @Override
     public MessageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.messagecard, parent, false);
