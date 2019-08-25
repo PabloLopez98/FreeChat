@@ -15,12 +15,12 @@ public class SignIn extends AppCompatActivity {
         setTitle("Sign In");
     }
 
-    public void Login(View view){
+    public void Login(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
-    public void toRegister(View view){
+    public void toRegister(View view) {
         Intent intent = new Intent(this, Register.class);
         startActivity(intent);
     }
