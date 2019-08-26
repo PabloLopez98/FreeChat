@@ -98,7 +98,7 @@ public class Register extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             profileUri = data.getData();
-            Picasso.with(this).load(profileUri).into(profileImage);
+            Picasso.with(this).load(profileUri).fit().into(profileImage);
 
         }
     }
