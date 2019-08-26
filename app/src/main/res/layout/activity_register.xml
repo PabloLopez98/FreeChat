@@ -18,11 +18,11 @@
         />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/profileImage"
         android:layout_width="125dp"
         android:layout_height="125dp"
         android:clickable="true"
-
+        android:onClick="openFileChooser"
         android:background="@android:drawable/picture_frame"/>
 
     <Space
@@ -59,7 +59,7 @@
         android:paddingStart="10dp" />
 
     <EditText
-        android:id="@+id/inputPassword"
+        android:id="@+id/inputNickname"
         android:layout_width="match_parent"
         android:layout_height="175px"
         android:layout_marginStart="32dp"
@@ -74,7 +74,7 @@
 
 
     <EditText
-        android:id="@+id/inputConfirmPassword"
+        android:id="@+id/inputPassword"
         android:layout_width="match_parent"
         android:layout_height="175px"
         android:layout_marginStart="32dp"
