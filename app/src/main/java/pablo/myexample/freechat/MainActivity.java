@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private ImageView profileImage;
     private TextView profileName, profileNickName;
+    private String theUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +100,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                Picasso.with(getApplicationContext()).load(user.getProfileUrl()).fit().into(profileImage);
+                theUrl = user.getProfileUrl();
+                Picasso.with(getApplicationContext()).load(theUrl).fit().into(profileImage);
                 profileNickName.setText(user.getNickName());
                 profileName.setText(user.getUserName());
             }
@@ -135,6 +137,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         } else if (id == R.id.startAChat) {
             Intent intent = new Intent(this, StartAChat.class);
+            intent.putExtra("name",profileName.getText().toString());
+            intent.putExtra("id",firebaseAuth.getCurrentUser().getUid());
+            intent.putExtra("url", theUrl);
             startActivity(intent);
         }
         DrawerLayout drawer = findViewById(R.id.coordinator_layout);
