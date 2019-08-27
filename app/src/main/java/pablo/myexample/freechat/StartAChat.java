@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,9 +30,13 @@ public class StartAChat extends AppCompatActivity implements CreateChatListAdapt
     private EditText input;
     private TextView displayChosen;
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference, databaseReferenceTwo;
     private ArrayList<User> arrayList;
-    private ArrayList<User> chosen;
+    private ArrayList<String> names;
+    private ArrayList<String> ids;
+    private ArrayList<String> urls;
+
+    boolean allowed = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +45,16 @@ public class StartAChat extends AppCompatActivity implements CreateChatListAdapt
         setTitle("Start A Chat");
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("UserRooms");
+        databaseReference = firebaseDatabase.getReference("Chats");
+        databaseReferenceTwo = firebaseDatabase.getReference("UserRooms");
 
         input = findViewById(R.id.inputUserToSearch);
         displayChosen = findViewById(R.id.displayChosen);
 
         arrayList = new ArrayList<>();
-        chosen = new ArrayList<>();
+        names = new ArrayList<>();
+        ids = new ArrayList<>();
+        urls = new ArrayList<>();
 
         RecyclerView recyclerView = findViewById(R.id.chosenforchatrecyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -78,28 +87,64 @@ public class StartAChat extends AppCompatActivity implements CreateChatListAdapt
         }
     }
 
-    boolean allowed = true;
-
     @Override
     public void onUserListener(int position){
 
         User chosenUser = arrayList.get(position);
 
-        for(int i = 0; i < chosen.size(); i++) {
-            if(chosen.get(i).getUserId().matches(chosenUser.getUserId())){
+        for(int i = 0; i < ids.size(); i++) {
+            if(ids.get(i).matches(chosenUser.getUserId())){
                 allowed = false;
                 break;
             }
         }
 
         if(allowed) {
-            chosen.add(chosenUser);
+
+            ids.add(chosenUser.getUserId());
+            names.add(chosenUser.getNickName());
+            urls.add(chosenUser.getProfileUrl());
+
             String forChosenName = chosenUser.getUserName() + ", ";
             String forChosen = displayChosen.getText().toString();
             String completeText = forChosen + forChosenName;
             displayChosen.setText(completeText);
             allowed = true;
         }
+    }
+
+    public void cancelMethod(View view){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void createChatRoom(View view){
+
+       /*
+        String RoomId = String.valueOf(System.currentTimeMillis());
+
+        if(urls.size() > 2){
+            //will use background blue for group
+            urls = new ArrayList<>();
+            RoomObject roomObject = new RoomObject(names, ids, urls);
+            databaseReference.child(RoomId).setValue(roomObject);
+
+        }else{
+            RoomObject roomObject = new RoomObject(names, ids, urls);
+            databaseReference.child(RoomId).setValue(roomObject);
+        }
+
+        //set value for roomObject : not in user, but for group : this keeps growing
+        MessageObject messageObject = new MessageObject("Alert!","This is the beginning of the chat.","July 31","2:11pm");
+        databaseReference.child(RoomId).child("Messages").push().setValue(messageObject);
+
+        //set value for specific users in chat : this is overriden everytime : gets last message object
+        for(int i = 0; i < ids.size(); i++) {
+            databaseReferenceTwo.child(ids.get(i)).child(RoomId).setValue(messageObject);
+        }
+        */
+
     }
 
 }

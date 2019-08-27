@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
+ /*   public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void toMethod(MenuItem item) {
         Intent intent = new Intent(this, SearchConversations.class);
         startActivity(intent);
-    }
+    }*/
 
     @Override
     public void onChatClick(int position) {

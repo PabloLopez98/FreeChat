@@ -29,8 +29,8 @@ public class Conversation extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         arrayList = new ArrayList<>();
-        MessageObject messageObject = new MessageObject("Pablo","This is my message");
-        MessageObject messageObject2 = new MessageObject("Pablo","This is my message");
+        MessageObject messageObject = new MessageObject("Pablo","This is my message","July 31","2:11pm");
+        MessageObject messageObject2 = new MessageObject("Pablo","This is my message","August 1","2:13pm");
         arrayList.add(messageObject);
         arrayList.add(messageObject2);
         RecyclerView recyclerView = findViewById(R.id.recyclerview_conversation);
