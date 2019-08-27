@@ -45,10 +45,11 @@ public class StartAChat extends AppCompatActivity implements CreateChatListAdapt
         displayChosen = findViewById(R.id.displayChosen);
 
         arrayList = new ArrayList<>();
+        chosen = new ArrayList<>();
 
         RecyclerView recyclerView = findViewById(R.id.chosenforchatrecyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        createChatListAdapter = new CreateChatListAdapter(this, arrayList);
+        createChatListAdapter = new CreateChatListAdapter(this, arrayList, this);
         recyclerView.setAdapter(createChatListAdapter);
     }
 
@@ -77,9 +78,28 @@ public class StartAChat extends AppCompatActivity implements CreateChatListAdapt
         }
     }
 
+    boolean allowed = true;
 
+    @Override
+    public void onUserListener(int position){
 
-    //click user
-    //save user in chosen arraylist
-    //every click, add onto text view names
+        User chosenUser = arrayList.get(position);
+
+        for(int i = 0; i < chosen.size(); i++) {
+            if(chosen.get(i).getUserId().matches(chosenUser.getUserId())){
+                allowed = false;
+                break;
+            }
+        }
+
+        if(allowed) {
+            chosen.add(chosenUser);
+            String forChosenName = chosenUser.getUserName() + ", ";
+            String forChosen = displayChosen.getText().toString();
+            String completeText = forChosen + forChosenName;
+            displayChosen.setText(completeText);
+            allowed = true;
+        }
+    }
+
 }

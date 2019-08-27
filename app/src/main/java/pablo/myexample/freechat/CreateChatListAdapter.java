@@ -19,16 +19,18 @@ public class CreateChatListAdapter extends RecyclerView.Adapter<CreateChatListAd
 
     private ArrayList<User> mData;
     private LayoutInflater mInflater;
+    private OnUserListener onUserListener;
 
-    CreateChatListAdapter(Context context, ArrayList<User> data) {
+    CreateChatListAdapter(Context context, ArrayList<User> data, OnUserListener onUserListener) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
+        this.onUserListener = onUserListener;
     }
 
     @Override
     public CreateChatListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.user_chosen_for_chat, parent, false);
-        return new CreateChatListAdapter.ViewHolder(view);
+        return new CreateChatListAdapter.ViewHolder(view, onUserListener);
     }
 
     @Override
@@ -46,16 +48,24 @@ public class CreateChatListAdapter extends RecyclerView.Adapter<CreateChatListAd
         return mData.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView name, nickname, id, url;
         ImageView imageView;
-        ViewHolder(View itemView) {
+        OnUserListener onUserListener;
+        ViewHolder(View itemView, OnUserListener onUserListener) {
             super(itemView);
             name = itemView.findViewById(R.id.userchosenname);
             nickname = itemView.findViewById(R.id.userchosennickname);
             id = itemView.findViewById(R.id.userChosenId);
             url = itemView.findViewById(R.id.userChosenUrl);
             imageView = itemView.findViewById(R.id.userChosenProfileImage);
+            this.onUserListener = onUserListener;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onUserListener.onUserListener(getAdapterPosition());
         }
     }
 
