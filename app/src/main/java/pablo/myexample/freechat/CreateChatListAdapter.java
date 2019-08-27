@@ -58,4 +58,8 @@ public class CreateChatListAdapter extends RecyclerView.Adapter<CreateChatListAd
             imageView = itemView.findViewById(R.id.userChosenProfileImage);
         }
     }
+
+    public interface OnUserListener{
+        void onUserListener(int position);
+    }
 }

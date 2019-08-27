@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class StartAChat extends AppCompatActivity {
+public class StartAChat extends AppCompatActivity implements CreateChatListAdapter.OnUserListener {
 
     private CreateChatListAdapter createChatListAdapter;
     private EditText input;
@@ -76,6 +76,8 @@ public class StartAChat extends AppCompatActivity {
         });
         }
     }
+
+
 
     //click user
     //save user in chosen arraylist
