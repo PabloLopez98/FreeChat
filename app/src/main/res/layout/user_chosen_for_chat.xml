@@ -17,10 +17,9 @@
             android:padding="8dp">
 
             <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/gallery_thumb"
+                android:id="@+id/userChosenProfileImage"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:background="@color/colorPrimary"
                 />
 
@@ -50,6 +49,22 @@
                     android:text="Nickname"
                     android:textColor="@android:color/black"
                     android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/userChosenId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nickname"
+                    android:textColor="@android:color/transparent"
+                    android:textSize="1dp" />
+
+                <TextView
+                    android:id="@+id/userChosenUrl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nickname"
+                    android:textColor="@android:color/transparent"
+                    android:textSize="1dp" />
 
             </LinearLayout>
         </LinearLayout>
