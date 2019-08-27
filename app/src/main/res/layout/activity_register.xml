@@ -68,7 +68,6 @@
         android:background="@drawable/rounded_edittext"
         android:ems="10"
         android:hint="Nickname"
-        android:inputType="textPassword"
         android:maxLines="1"
         android:paddingStart="10dp" />
 

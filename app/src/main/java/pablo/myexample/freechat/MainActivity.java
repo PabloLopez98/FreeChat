@@ -21,6 +21,13 @@ import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -30,6 +37,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -39,6 +48,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ChatPreviewAdapter chatPreviewAdapter;
     private ArrayList<ChatPreviewCardObject> arrayList;
     private FirebaseAuth firebaseAuth;
+    private String userId;
+    private NavigationView navigationView;
+    private ImageView profileImage;
+    private TextView profileName, profileNickName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +59,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        userId = firebaseAuth.getCurrentUser().getUid();
+        navigationView = findViewById(R.id.nav_view);
+        profileImage = navigationView.getHeaderView(0).findViewById(R.id.imageViewHeader);
+        profileName = navigationView.getHeaderView(0).findViewById(R.id.nameViewHeader);
+        profileNickName = navigationView.getHeaderView(0).findViewById(R.id.nickNameViewHeader);
+
+        setUpProfileDrawerHeader();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -71,6 +91,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         chatPreviewAdapter = new ChatPreviewAdapter(this, arrayList, this);
         recyclerView.setAdapter(chatPreviewAdapter);
 
+    }
+
+    private void setUpProfileDrawerHeader() {
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("UserRooms").child(userId);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                Picasso.with(getApplicationContext()).load(user.getProfileUrl()).fit().into(profileImage);
+                profileNickName.setText(user.getNickName());
+                profileName.setText(user.getUserName());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
