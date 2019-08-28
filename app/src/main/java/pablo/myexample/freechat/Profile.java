@@ -14,12 +14,12 @@ public class Profile extends AppCompatActivity {
         setTitle("Profile");
     }
 
-    public void Update(View view){
+    public void Update(View view) {
 
     }
 
-    public void returnToMain(View view){
-
+    public void returnToMain(View view) {
+        finish();
     }
 
 }

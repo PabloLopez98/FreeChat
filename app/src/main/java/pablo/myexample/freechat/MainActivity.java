@@ -10,10 +10,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.solver.widgets.Snapshot;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -27,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.snapshot.ChildrenNode;
 import com.squareup.picasso.Picasso;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageView profileImage;
     private TextView profileName, profileNickName;
     private String theUrl;
+    private DatabaseReference databaseReference;
+    private ChatPreviewCardObject chatPreviewCardObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +66,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getCurrentUser().getUid();
+        databaseReference = FirebaseDatabase.getInstance().getReference("UserRooms").child(userId);
         navigationView = findViewById(R.id.nav_view);
         profileImage = navigationView.getHeaderView(0).findViewById(R.id.imageViewHeader);
         profileName = navigationView.getHeaderView(0).findViewById(R.id.nameViewHeader);
         profileNickName = navigationView.getHeaderView(0).findViewById(R.id.nickNameViewHeader);
-
+        //setup profile info
         setUpProfileDrawerHeader();
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.coordinator_layout);
@@ -77,21 +82,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
+        //populate the recyclerview with the current users chats
         arrayList = new ArrayList<>();
 
-        Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-        ChatPreviewCardObject chatPreviewCardObject = new ChatPreviewCardObject(bitmap, "username", "This is the preview of the message it is not a real message!", "date", "time", "1");
-        ChatPreviewCardObject chatPreviewCardObject2 = new ChatPreviewCardObject(bitmap, "username2", "preview2", "date2", "time2", "2");
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
 
-        arrayList.add(chatPreviewCardObject);
-        arrayList.add(chatPreviewCardObject2);
+                    if (dataSnapshot1.hasChild("LastMessage")) {
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        chatPreviewAdapter = new ChatPreviewAdapter(this, arrayList, this);
-        recyclerView.setAdapter(chatPreviewAdapter);
+                            MessageObject messageObject = dataSnapshot1.child("LastMessage").getValue(MessageObject.class);
 
+                            String message = messageObject.getMessageText();
+                            String date = messageObject.getMessageDate();
+                            String time = messageObject.getMessageTime();
+
+                            String url = dataSnapshot1.child("previewUrl").getValue(String.class);
+                            String name = dataSnapshot1.child("previewName").getValue(String.class);
+
+                            chatPreviewCardObject = new ChatPreviewCardObject(name, message, date, time, "1", url);
+
+                            arrayList.add(chatPreviewCardObject);
+
+                    }
+                }
+
+                RecyclerView recyclerView = findViewById(R.id.recycler_view);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                chatPreviewAdapter = new ChatPreviewAdapter(getApplicationContext(), arrayList, MainActivity.this);
+                recyclerView.setAdapter(chatPreviewAdapter);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 
     private void setUpProfileDrawerHeader() {
@@ -105,10 +133,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 profileNickName.setText(user.getNickName());
                 profileName.setText(user.getUserName());
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
@@ -129,16 +155,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         if (id == R.id.logout) {
             firebaseAuth.signOut();
-            Intent intent = new Intent(MainActivity.this, SignIn.class);
+            Intent intent = new Intent(this, SignIn.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            finish();
         } else if (id == R.id.profile) {
             Intent intent = new Intent(this, Profile.class);
             startActivity(intent);
         } else if (id == R.id.startAChat) {
             Intent intent = new Intent(this, StartAChat.class);
-            intent.putExtra("name",profileName.getText().toString());
-            intent.putExtra("id",firebaseAuth.getCurrentUser().getUid());
+            intent.putExtra("name", profileName.getText().toString());
+            intent.putExtra("id", firebaseAuth.getCurrentUser().getUid());
             intent.putExtra("url", theUrl);
             startActivity(intent);
         }

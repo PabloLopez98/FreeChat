@@ -4,9 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -35,6 +38,7 @@ public class ChatPreviewAdapter extends RecyclerView.Adapter<ChatPreviewAdapter.
         holder.date.setText(mData.get(position).getDate());
         holder.time.setText(mData.get(position).getTime());
         holder.notifications.setText(mData.get(position).getNotifications());
+        Picasso.with(holder.itemView.getContext()).load(mData.get(position).getUrl()).fit().into(holder.imageView);
     }
 
     @Override
@@ -44,6 +48,7 @@ public class ChatPreviewAdapter extends RecyclerView.Adapter<ChatPreviewAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView name, message_preview, date, time, notifications;
+        ImageView imageView;
         onChatListener onChatListener;
 
         ViewHolder(View itemView, onChatListener onChatListener) {
@@ -53,6 +58,7 @@ public class ChatPreviewAdapter extends RecyclerView.Adapter<ChatPreviewAdapter.
              date = itemView.findViewById(R.id.card_date);
              time = itemView.findViewById(R.id.card_time);
              notifications = itemView.findViewById(R.id.card_notifications);
+             imageView = itemView.findViewById(R.id.imageViewForProfile);
              this.onChatListener = onChatListener;
              itemView.setOnClickListener(this);
         }

@@ -5,14 +5,16 @@ import java.util.List;
 
 public class RoomObject {
 
-    private ArrayList<String> listOfNames, listOfIds, listOfUrls;
+    private ArrayList<String> listOfNames, listOfIds;
+    private String roomId;
 
-    RoomObject(){}
+    RoomObject() {
+    }
 
-    public RoomObject(ArrayList<String> listOfNames, ArrayList<String> listOfIds, ArrayList<String> listOfUrls) {
+    public RoomObject(ArrayList<String> listOfNames, ArrayList<String> listOfIds, String roomId) {
         this.listOfNames = listOfNames;
         this.listOfIds = listOfIds;
-        this.listOfUrls = listOfUrls;
+        this.roomId = roomId;
     }
 
     public ArrayList<String> getListOfNames() {
@@ -31,11 +33,11 @@ public class RoomObject {
         this.listOfIds = listOfIds;
     }
 
-    public ArrayList<String> getListOfUrls() {
-        return listOfUrls;
+    public String getRoomId() {
+        return roomId;
     }
 
-    public void setListOfUrls(ArrayList<String> listOfUrls) {
-        this.listOfUrls = listOfUrls;
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
     }
 }

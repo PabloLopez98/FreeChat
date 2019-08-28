@@ -2,29 +2,28 @@ package pablo.myexample.freechat;
 
 import android.graphics.Bitmap;
 
-public class ChatPreviewCardObject{
+public class ChatPreviewCardObject {
 
-    private Bitmap profile_image;
-    private String username, message_preview, date, time, notifications;
+    private String username, message_preview, date, time, notifications, url;
 
-    public ChatPreviewCardObject(Bitmap profile_image, String username, String message_preview, String date, String time, String notifications) {
-        this.profile_image = profile_image;
+    public ChatPreviewCardObject(String username, String message_preview, String date, String time, String notifications, String url) {
         this.username = username;
         this.message_preview = message_preview;
         this.date = date;
         this.time = time;
         this.notifications = notifications;
+        this.url = url;
     }
 
     public ChatPreviewCardObject() {
     }
 
-    public Bitmap getProfile_image() {
-        return profile_image;
+    public String getUrl() {
+        return url;
     }
 
-    public void setProfile_image(Bitmap profile_image) {
-        this.profile_image = profile_image;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getUsername() {
