@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,8 +19,9 @@ import java.util.ArrayList;
 
 public class Conversation extends AppCompatActivity {
 
-    MessageAdapter messageAdapter;
-    ArrayList<MessageObject> arrayList;
+    private MessageAdapter messageAdapter;
+    private ArrayList<MessageObject> arrayList;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,11 @@ public class Conversation extends AppCompatActivity {
         setTitle(" ");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        arrayList = new ArrayList<>();
+        intent = getIntent();
+        String roomId = intent.getStringExtra("roomId");
+        Log.i("roomId!", roomId);
+
+       /* arrayList = new ArrayList<>();
         MessageObject messageObject = new MessageObject("Pablo","This is my message","July 31","2:11pm");
         MessageObject messageObject2 = new MessageObject("Pablo","This is my message","August 1","2:13pm");
         arrayList.add(messageObject);
@@ -37,7 +43,7 @@ public class Conversation extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         messageAdapter = new MessageAdapter(this, arrayList);
         recyclerView.setAdapter(messageAdapter);
-
+*/
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

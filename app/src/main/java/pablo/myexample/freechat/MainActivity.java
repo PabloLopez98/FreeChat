@@ -58,11 +58,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String theUrl;
     private DatabaseReference databaseReference;
     private ChatPreviewCardObject chatPreviewCardObject;
+    private ArrayList<String> roomIdArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        roomIdArray = new ArrayList<>();
 
         firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getCurrentUser().getUid();
@@ -102,7 +105,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             String url = dataSnapshot1.child("previewUrl").getValue(String.class);
                             String name = dataSnapshot1.child("previewName").getValue(String.class);
 
-                            chatPreviewCardObject = new ChatPreviewCardObject(name, message, date, time, "1", url);
+                            chatPreviewCardObject = new ChatPreviewCardObject(name, message, date, time, " ", url);
+
+                            //get room id to enter chat room
+                            String roomId = dataSnapshot1.child("previewRoomId").getValue(String.class);
+                            roomIdArray.add(roomId);
 
                             arrayList.add(chatPreviewCardObject);
 
@@ -156,7 +163,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.logout) {
             firebaseAuth.signOut();
             Intent intent = new Intent(this, SignIn.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         } else if (id == R.id.profile) {
             Intent intent = new Intent(this, Profile.class);
@@ -187,6 +193,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onChatClick(int position) {
         Intent intent = new Intent(this, Conversation.class);
+        intent.putExtra("roomId", roomIdArray.get(position));
+        startActivity(intent);
+    }
+
+    public void toCreateChatRoom(View view){
+        Intent intent = new Intent(this, StartAChat.class);
+        intent.putExtra("name", profileName.getText().toString());
+        intent.putExtra("id", firebaseAuth.getCurrentUser().getUid());
+        intent.putExtra("url", theUrl);
         startActivity(intent);
     }
 }

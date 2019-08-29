@@ -172,22 +172,24 @@ public class StartAChat extends AppCompatActivity implements CreateChatListAdapt
                     if (ids.get(i).matches(myId)) {
                         databaseReference.child(ids.get(i)).child(RoomId).child("previewUrl").setValue(urls.get(1));
                         databaseReference.child(ids.get(i)).child(RoomId).child("previewName").setValue(names.get(1));
+                        databaseReference.child(ids.get(i)).child(RoomId).child("previewRoomId").setValue(RoomId);
                     } else {
                         databaseReference.child(ids.get(i)).child(RoomId).child("previewUrl").setValue(urls.get(0));
                         databaseReference.child(ids.get(i)).child(RoomId).child("previewName").setValue(names.get(0));
+                        databaseReference.child(ids.get(i)).child(RoomId).child("previewRoomId").setValue(RoomId);
                     }
                 } else {
                     ArrayList<String> singleUrl = new ArrayList<>();
                     singleUrl.add("https://firebasestorage.googleapis.com/v0/b/freechat-36ca9.appspot.com/o/Uploads%2Fimages%2FIxEuSOv65cciAnMcvPDcQO0NOgs2%2F1566861959431.jpg?alt=media&token=d10b2d42-cccb-441e-a93b-4c4bbfd54ede");
                     databaseReference.child(ids.get(i)).child(RoomId).child("previewUrl").setValue(singleUrl.get(0));
                     databaseReference.child(ids.get(i)).child(RoomId).child("previewName").setValue(String.valueOf(names));
+                    databaseReference.child(ids.get(i)).child(RoomId).child("previewRoomId").setValue(RoomId);
                 }
                 //add last message under each user
                 databaseReference.child(ids.get(i)).child(RoomId).child("LastMessage").setValue(messageObject);
             }
 
             Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
 
         }else{
