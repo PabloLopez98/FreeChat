@@ -73,6 +73,7 @@ public class Conversation extends AppCompatActivity {
                 messageAdapter = new MessageAdapter(getApplicationContext(), arrayList);
                 recyclerView.setAdapter(messageAdapter);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -91,6 +92,7 @@ public class Conversation extends AppCompatActivity {
                 ids = roomObject.getListOfIds();
                 invalidateOptionsMenu();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -109,7 +111,7 @@ public class Conversation extends AppCompatActivity {
     }
 
     //send and listen for messages to update recyclerview
-    public void toSendAndListenForMessages(View view) {
+    public void sendMessages(View view) {
         String theMessage = input.getText().toString();
         if (theMessage.matches("")) {
             Toast.makeText(getApplicationContext(), "Input a message", Toast.LENGTH_SHORT).show();
@@ -125,19 +127,20 @@ public class Conversation extends AppCompatActivity {
                 }
             }
             MessageObject messageObject = new MessageObject(myName, theMessage, Date, Time, myId);
+
             //add message to chat room
-            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-            DatabaseReference databaseReference = firebaseDatabase.getReference("Chats").child(roomId).child("Messages");
+            databaseReference = FirebaseDatabase.getInstance().getReference("Chats").child(roomId).child("Messages");
             databaseReference.push().setValue(messageObject);
+
             //change last message for every user
+            FirebaseDatabase firebaseDatabaseForUserRooms = FirebaseDatabase.getInstance();
             for (int i = 0; i < ids.size(); i++) {
-                DatabaseReference databaseReferenceTwo = firebaseDatabase.getReference("UserRooms").child(ids.get(i)).child(roomId).child("LastMessage");
+                DatabaseReference databaseReferenceTwo = firebaseDatabaseForUserRooms.getReference("UserRooms").child(ids.get(i)).child(roomId).child("LastMessage");
                 databaseReferenceTwo.setValue(messageObject);
             }
         }
-
-        //listen for changes in chat room and update recyclerview
-
     }
+
+    //use databaseReference to listen and for new messages in database and update recyclerview
 
 }
