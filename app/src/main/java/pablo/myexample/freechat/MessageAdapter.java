@@ -33,6 +33,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         holder.messageText.setText(mData.get(position).getMessageText());
         holder.messageDate.setText(mData.get(position).getMessageDate());
         holder.messageTime.setText(mData.get(position).getMessageTime());
+        holder.messageId.setText(mData.get(position).getMessageId());
     }
 
     @Override
@@ -41,13 +42,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView messageName, messageText, messageDate, messageTime;
+        TextView messageName, messageText, messageDate, messageTime, messageId;
         ViewHolder(View itemView) {
             super(itemView);
             messageName = itemView.findViewById(R.id.messageName);
             messageText = itemView.findViewById(R.id.messageText);
             messageDate = itemView.findViewById(R.id.messageDate);
             messageTime = itemView.findViewById(R.id.messageTime);
+            messageId =  itemView.findViewById(R.id.messageId);
         }
     }
 }

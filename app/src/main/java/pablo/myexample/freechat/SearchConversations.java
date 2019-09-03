@@ -22,7 +22,7 @@ public class SearchConversations extends AppCompatActivity implements ChatPrevie
         setTitle("Search Chats");
 
         ArrayList<ChatPreviewCardObject> arrayList = new ArrayList<>();
-        Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+        //Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
         //ChatPreviewCardObject chatPreviewCardObject = new ChatPreviewCardObject(bitmap, "username", "This is the preview of the message it is not a real message!", "date", "time", "1");
         //ChatPreviewCardObject chatPreviewCardObject2 = new ChatPreviewCardObject(bitmap, "username2", "preview2", "date2", "time2", "2");
         //arrayList.add(chatPreviewCardObject);

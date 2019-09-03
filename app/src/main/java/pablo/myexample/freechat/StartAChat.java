@@ -130,7 +130,6 @@ public class StartAChat extends AppCompatActivity implements CreateChatListAdapt
         Log.i("star", String.valueOf(allowed));
 
         if (allowed) {
-            Log.i("three", "yes");
             ids.add(chosenUser.getUserId());
             names.add(chosenUser.getUserName());
             urls.add(chosenUser.getProfileUrl());
@@ -139,7 +138,6 @@ public class StartAChat extends AppCompatActivity implements CreateChatListAdapt
             String completeText = forChosen + forChosenName;
             displayChosen.setText(completeText);
         } else {
-            Log.i("four", "yes");
             allowed = true;
         }
 
@@ -163,7 +161,7 @@ public class StartAChat extends AppCompatActivity implements CreateChatListAdapt
             RoomObject roomObject = new RoomObject(names, ids, RoomId);
             databaseReferenceTwo.child(RoomId).setValue(roomObject);
 
-            MessageObject messageObject = new MessageObject("Alert!", "This is the beginning of the chat.", Date, Time);
+            MessageObject messageObject = new MessageObject("Alert!", "Beginning of the chat.", Date, Time, "emptyId");
             databaseReferenceTwo.child(RoomId).child("Messages").push().setValue(messageObject);
 
             //for every user

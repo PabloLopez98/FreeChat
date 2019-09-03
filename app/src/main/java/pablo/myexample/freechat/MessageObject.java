@@ -2,16 +2,17 @@ package pablo.myexample.freechat;
 
 public class MessageObject {
 
-    private String messageName, messageText, messageDate, messageTime;
+    private String messageName, messageText, messageDate, messageTime, messageId;
 
     public MessageObject() {
     }
 
-    public MessageObject(String messageName, String messageText, String messageDate, String messageTime){
+    public MessageObject(String messageName, String messageText, String messageDate, String messageTime, String messageId){
         this.messageName = messageName;
         this.messageText = messageText;
         this.messageDate = messageDate;
         this.messageTime = messageTime;
+        this.messageId = messageId;
     }
 
     public String getMessageName() {
@@ -44,5 +45,13 @@ public class MessageObject {
 
     public void setMessageTime(String messageTime) {
         this.messageTime = messageTime;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 }
