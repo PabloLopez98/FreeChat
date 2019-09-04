@@ -19,6 +19,14 @@
         >
 
         <TextView
+            android:id="@+id/messageId"
+            android:text="fireabse id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/transparent"
+            />
+
+        <TextView
             android:id="@+id/messageTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

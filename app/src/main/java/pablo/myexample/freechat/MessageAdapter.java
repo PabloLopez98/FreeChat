@@ -8,22 +8,42 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder>{
+public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
     private ArrayList<MessageObject> mData;
     private LayoutInflater mInflater;
+    private FirebaseAuth firebaseAuth;
+    private String myId;
+
+
+    @Override
+    public int getItemViewType(int position) {
+        firebaseAuth = FirebaseAuth.getInstance();
+        myId = firebaseAuth.getCurrentUser().getUid();
+        if (mData.get(position).getMessageId().matches(myId)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 
     MessageAdapter(Context context, ArrayList<MessageObject> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
 
-    //In the future alter layouts (other message on left, my message on right) by checking my message id with my id: if my id(right) else (left)
     @Override
     public MessageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.messagecard, parent, false);
+        View view;
+        if (viewType == 1) {
+            view = mInflater.inflate(R.layout.messagecardmine, parent, false);
+        } else {
+            view = mInflater.inflate(R.layout.messagecard, parent, false);
+        }
         return new MessageAdapter.ViewHolder(view);
     }
 
@@ -41,15 +61,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         return mData.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView messageName, messageText, messageDate, messageTime, messageId;
+
         ViewHolder(View itemView) {
             super(itemView);
             messageName = itemView.findViewById(R.id.messageName);
             messageText = itemView.findViewById(R.id.messageText);
             messageDate = itemView.findViewById(R.id.messageDate);
             messageTime = itemView.findViewById(R.id.messageTime);
-            messageId =  itemView.findViewById(R.id.messageId);
+            messageId = itemView.findViewById(R.id.messageId);
         }
     }
 }

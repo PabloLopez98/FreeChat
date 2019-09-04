@@ -1,6 +1,7 @@
 package pablo.myexample.freechat;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,7 +49,6 @@ public class Conversation extends AppCompatActivity {
     private EditText input;
     private String myName;
 
-    //display all messages
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,28 +61,14 @@ public class Conversation extends AppCompatActivity {
         arrayList = new ArrayList<>();
         intent = getIntent();
         roomId = intent.getStringExtra("roomId");
-        databaseReference = FirebaseDatabase.getInstance().getReference("Chats").child(roomId).child("Messages");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    MessageObject messageObject = dataSnapshot1.getValue(MessageObject.class);
-                    arrayList.add(messageObject);
-                }
-                recyclerView = findViewById(R.id.recyclerview_conversation);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                messageAdapter = new MessageAdapter(getApplicationContext(), arrayList);
-                recyclerView.setAdapter(messageAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
+        recyclerView = findViewById(R.id.recyclerview_conversation);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        messageAdapter = new MessageAdapter(getApplicationContext(), arrayList);
+        recyclerView.setAdapter(messageAdapter);
+        listenForAddedMessages();
         getNamesAndIds();
     }
 
-    //get all users names and ids
     public void getNamesAndIds() {
         databaseReference = FirebaseDatabase.getInstance().getReference("Chats").child(roomId);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -92,14 +79,12 @@ public class Conversation extends AppCompatActivity {
                 ids = roomObject.getListOfIds();
                 invalidateOptionsMenu();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
     }
 
-    //create options menu filled with users' names
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -110,7 +95,6 @@ public class Conversation extends AppCompatActivity {
         return true;
     }
 
-    //send and listen for messages to update recyclerview
     public void sendMessages(View view) {
         String theMessage = input.getText().toString();
         if (theMessage.matches("")) {
@@ -141,6 +125,28 @@ public class Conversation extends AppCompatActivity {
         }
     }
 
-    //use databaseReference to listen and for new messages in database and update recyclerview
+    public void listenForAddedMessages(){
+        DatabaseReference databaseReferenceAddedMessages = FirebaseDatabase.getInstance().getReference("Chats").child(roomId).child("Messages");
+        databaseReferenceAddedMessages.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                MessageObject messageObject = dataSnapshot.getValue(MessageObject.class);
+                arrayList.add(messageObject);
+                messageAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+    }
 }
