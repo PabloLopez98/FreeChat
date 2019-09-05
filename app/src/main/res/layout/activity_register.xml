@@ -67,7 +67,7 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_edittext"
         android:ems="10"
-        android:hint="Nickname"
+        android:hint="Permanent Nickname"
         android:maxLines="1"
         android:paddingStart="10dp" />
 

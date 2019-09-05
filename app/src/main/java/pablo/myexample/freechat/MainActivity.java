@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.solver.widgets.Snapshot;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -24,6 +25,7 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -64,17 +66,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         roomIdArray = new ArrayList<>();
         firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getCurrentUser().getUid();
-        databaseReference = FirebaseDatabase.getInstance().getReference("UserRooms").child(userId);
         navigationView = findViewById(R.id.nav_view);
         profileImage = navigationView.getHeaderView(0).findViewById(R.id.imageViewHeader);
         profileName = navigationView.getHeaderView(0).findViewById(R.id.nameViewHeader);
         profileNickName = navigationView.getHeaderView(0).findViewById(R.id.nickNameViewHeader);
-        //setup profile info
-        setUpProfileDrawerHeader();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.coordinator_layout);
@@ -83,49 +81,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
         //populate the recyclerview with the current users chats
         arrayList = new ArrayList<>();
-
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-
-                    if (dataSnapshot1.hasChild("LastMessage")) {
-
-                            MessageObject messageObject = dataSnapshot1.child("LastMessage").getValue(MessageObject.class);
-
-                            String message = messageObject.getMessageText();
-                            String date = messageObject.getMessageDate();
-                            String time = messageObject.getMessageTime();
-
-                            String url = dataSnapshot1.child("previewUrl").getValue(String.class);
-                            String name = dataSnapshot1.child("previewName").getValue(String.class);
-
-                            chatPreviewCardObject = new ChatPreviewCardObject(name, message, date, time, " ", url);
-
-                            //get room id to enter chat room
-                            String roomId = dataSnapshot1.child("previewRoomId").getValue(String.class);
-                            roomIdArray.add(roomId);
-
-                            arrayList.add(chatPreviewCardObject);
-
-                    }
-                }
-
-                RecyclerView recyclerView = findViewById(R.id.recycler_view);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                chatPreviewAdapter = new ChatPreviewAdapter(getApplicationContext(), arrayList, MainActivity.this);
-                recyclerView.setAdapter(chatPreviewAdapter);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        chatPreviewAdapter = new ChatPreviewAdapter(getApplicationContext(), arrayList, MainActivity.this);
+        recyclerView.setAdapter(chatPreviewAdapter);
+        //populate then drawer
+        populateRecyclerView();
+        setUpProfileDrawerHeader();
     }
 
     private void setUpProfileDrawerHeader() {
@@ -139,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 profileNickName.setText(user.getNickName());
                 profileName.setText(user.getUserName());
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -163,10 +128,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             firebaseAuth.signOut();
             Intent intent = new Intent(this, SignIn.class);
             startActivity(intent);
-        } else if (id == R.id.profile) {
+        } /*else if (id == R.id.profile) {
             Intent intent = new Intent(this, Profile.class);
             startActivity(intent);
-        } else if (id == R.id.startAChat) {
+        }*/ else if (id == R.id.startAChat) {
             Intent intent = new Intent(this, StartAChat.class);
             intent.putExtra("name", profileName.getText().toString());
             intent.putExtra("id", firebaseAuth.getCurrentUser().getUid());
@@ -178,17 +143,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
- /*   public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    public void toMethod(MenuItem item) {
-        Intent intent = new Intent(this, SearchConversations.class);
-        startActivity(intent);
-    }*/
-
     @Override
     public void onChatClick(int position) {
         Intent intent = new Intent(this, Conversation.class);
@@ -196,11 +150,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
 
-    public void toCreateChatRoom(View view){
+    public void toCreateChatRoom(View view) {
         Intent intent = new Intent(this, StartAChat.class);
         intent.putExtra("name", profileName.getText().toString());
         intent.putExtra("id", firebaseAuth.getCurrentUser().getUid());
         intent.putExtra("url", theUrl);
         startActivity(intent);
     }
+
+    public void populateRecyclerView() {
+        databaseReference = FirebaseDatabase.getInstance().getReference("UserRooms").child(userId);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayList.clear();
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) { //each child is a room
+                    if (dataSnapshot1.hasChild("LastMessage")) {//getting last message of each child
+                        MessageObject messageObject = dataSnapshot1.child("LastMessage").getValue(MessageObject.class);
+                        //
+                        String message = messageObject.getMessageText();
+                        String date = messageObject.getMessageDate();
+                        String time = messageObject.getMessageTime();
+                        //
+                        String url = dataSnapshot1.child("previewUrl").getValue(String.class);
+                        String name = dataSnapshot1.child("previewName").getValue(String.class);
+                        //
+                        chatPreviewCardObject = new ChatPreviewCardObject(name, message, date, time, " ", url);
+                        //get room id to enter chat room
+                        String roomId = dataSnapshot1.child("previewRoomId").getValue(String.class);
+                        roomIdArray.add(roomId);
+                        //
+                        arrayList.add(chatPreviewCardObject);
+                        chatPreviewAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
 }
+
+/*
+  for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) { //each child is a room
+                    if (dataSnapshot1.hasChild("LastMessage")) {//getting last message of each child
+
+                        MessageObject messageObject = dataSnapshot1.child("LastMessage").getValue(MessageObject.class);
+                        //
+                        String message = messageObject.getMessageText();
+                        String date = messageObject.getMessageDate();
+                        String time = messageObject.getMessageTime();
+                        //
+                        String url = dataSnapshot1.child("previewUrl").getValue(String.class);
+                        String name = dataSnapshot1.child("previewName").getValue(String.class);
+                        //
+                        chatPreviewCardObject = new ChatPreviewCardObject(name, message, date, time, " ", url);
+                        //get room id to enter chat room
+                        String roomId = dataSnapshot1.child("previewRoomId").getValue(String.class);
+                        roomIdArray.add(roomId);
+                        //
+                        arrayList.add(chatPreviewCardObject);
+                        chatPreviewAdapter.notifyDataSetChanged();
+
+                    } }
+ */

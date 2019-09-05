@@ -8,10 +8,14 @@
             android:id="@+id/startAChat"
             android:icon="@android:drawable/sym_action_chat"
             android:title="@string/start_chat" />
+
+        <!--
         <item
             android:id="@+id/profile"
             android:icon="@drawable/ic_account_box_black_24dp"
             android:title="@string/profile" />
+            -->
+
         <item
             android:id="@+id/logout"
             android:icon="@drawable/ic_arrow_back_black_24dp"
