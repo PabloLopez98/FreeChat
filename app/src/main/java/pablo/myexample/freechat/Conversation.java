@@ -151,8 +151,8 @@ public class Conversation extends AppCompatActivity {
         try {
             json.put("to","/topics/"+roomId);
             JSONObject notificationObj = new JSONObject();
-            notificationObj.put("title","any title");
-            notificationObj.put("body","any body");
+            notificationObj.put("title","New Message:");
+            notificationObj.put("body",input.getText().toString());
             json.put("notification",notificationObj);
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL,
                     json,
