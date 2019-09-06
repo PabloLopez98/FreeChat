@@ -68,10 +68,6 @@ public class Conversation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
-        //For the notifications
-        requestQueue = Volley.newRequestQueue(this);
-        FirebaseMessaging.getInstance().subscribeToTopic("news");
-        //
         setTitle(" ");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         input = findViewById(R.id.inputAMessage);
@@ -87,6 +83,10 @@ public class Conversation extends AppCompatActivity {
         //important behavior
         listenForAddedMessages();
         getNamesAndIds();
+        //For the notifications
+        requestQueue = Volley.newRequestQueue(this);
+        FirebaseMessaging.getInstance().subscribeToTopic(roomId);
+        //
     }
 
     public void getNamesAndIds() {
@@ -149,7 +149,7 @@ public class Conversation extends AppCompatActivity {
     private void sendNotification() {
         JSONObject json = new JSONObject();
         try {
-            json.put("to","/topics/"+"news");
+            json.put("to","/topics/"+roomId);
             JSONObject notificationObj = new JSONObject();
             notificationObj.put("title","any title");
             notificationObj.put("body","any body");
@@ -172,7 +172,7 @@ public class Conversation extends AppCompatActivity {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String,String> header = new HashMap<>();
                     header.put("content-type","application/json");
-                    header.put("authorization","key=AIzaSyAE7KUUU6tLrYp-fvZNOJGiLvsjo-YPeAM");
+                    header.put("authorization","key=AIzaSyDAwVaRmJ25eYHuBQHSzOOj-0ezeosy1sQ");
                     return header;
                 }
             };
