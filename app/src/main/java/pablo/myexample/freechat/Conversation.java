@@ -21,6 +21,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -29,12 +36,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Conversation extends AppCompatActivity {
 
@@ -48,11 +61,17 @@ public class Conversation extends AppCompatActivity {
     private String roomId;
     private EditText input;
     private String myName;
+    private RequestQueue requestQueue;
+    private String URL = "https://fcm.googleapis.com/fcm/send";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
+        //For the notifications
+        requestQueue = Volley.newRequestQueue(this);
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+        //
         setTitle(" ");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         input = findViewById(R.id.inputAMessage);
@@ -65,6 +84,7 @@ public class Conversation extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         messageAdapter = new MessageAdapter(getApplicationContext(), arrayList);
         recyclerView.setAdapter(messageAdapter);
+        //important behavior
         listenForAddedMessages();
         getNamesAndIds();
     }
@@ -123,6 +143,45 @@ public class Conversation extends AppCompatActivity {
                 databaseReferenceTwo.setValue(messageObject);
             }
         }
+        sendNotification();
+    }
+
+    private void sendNotification() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("to","/topics/"+"news");
+            JSONObject notificationObj = new JSONObject();
+            notificationObj.put("title","any title");
+            notificationObj.put("body","any body");
+            json.put("notification",notificationObj);
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL,
+                    json,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d("MUR", "onResponse: ");
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("MUR", "onError: "+error.networkResponse);
+                }
+            }
+            ){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String,String> header = new HashMap<>();
+                    header.put("content-type","application/json");
+                    header.put("authorization","key=AIzaSyAE7KUUU6tLrYp-fvZNOJGiLvsjo-YPeAM");
+                    return header;
+                }
+            };
+            requestQueue.add(request);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void listenForAddedMessages(){
@@ -136,6 +195,7 @@ public class Conversation extends AppCompatActivity {
             }
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
             }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
@@ -145,8 +205,8 @@ public class Conversation extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
+
 }
